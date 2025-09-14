@@ -1,16 +1,27 @@
+import Login from './pageObject/login'
+import HomePage from './pageObject/homePage'
+import LoggedHomePage from './pageObject/loggedHomePage'
+
 describe('User Login', () => {
-  it('should login successfully with valid data', () => {
-    cy.visit('https://magento.nublue.co.uk/')
+  
+  const login = new Login()
+  const homePage = new HomePage()
+  const loggedHomePage = new LoggedHomePage()
 
-    cy.contains('a', 'Sign In').click()
-    cy.url().should('include', '/customer/account/login')
+  // Load user data
+  beforeEach(() => {
+    cy.fixture('user').as('userData')
+  })
 
-    cy.get('input[id="email"]').type("roni_cost@example.com")
-    cy.get('input[name="login[password]"]').type("roni_cost3@example.com")
-
-    cy.get('button[type="submit"]').contains('Sign In').click()
-
-    cy.get('.logged-in').should('contain.text', 'Welcome,')
+  it('should login successfully with valid data', function () {
+    
+    cy.visitHomePage()
+    homePage.signInButton().click()
+    login.verifyUrl()
+    login.email().type(this.userData.validUserEmail)
+    login.password().type(this.userData.validUserPass)
+    login.signInButton().click()
+    loggedHomePage.verifyWelcomeMessage()
 
   })
 })

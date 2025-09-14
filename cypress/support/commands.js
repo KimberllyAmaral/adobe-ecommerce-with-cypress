@@ -23,3 +23,8 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Visit home page
+Cypress.Commands.add('visitHomePage', () => {
+  cy.visit('https://magento.nublue.co.uk/')
+})
